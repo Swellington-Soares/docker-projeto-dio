@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  web:
+    image: php:8.2-apache
+    container_name: apache-php
+    ports:
+      - "80:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: mariadb:10.11
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mysite
+      MYSQL_USER: swell
+      MYSQL_PASSWORD: swell123456
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  db-data:
+
+networks:
+  app-network:
+    driver: bridge
